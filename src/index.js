@@ -1,12 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+/* react */
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+/* style */
+import { ThemeProvider } from 'styled-components'
+import theme from './theme'
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+/* util */
+import * as serviceWorker from './util/serviceWorker'
+
+/* polyfills */
+import 'whatwg-fetch'
+
+const root = document.getElementById('root')
+
+let render = () => {
+  const App = require('./App').default
+
+  ReactDOM.render(
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>,
+    root
+  )
+}
+
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+  module.hot.accept(['./App', './theme'], () => {
+    render()
+  })
+}
+
+render()
+
+serviceWorker.unregister()
